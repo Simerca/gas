@@ -1,9 +1,9 @@
 <template>
-  <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+  <div id="carouselExampleControls" class="carousel slide" data-ride="carousel" v-if="apps.length>0">
   <div class="carousel-inner">
-    <div class="carousel-item active">
-      <img src="https://via.placeholder.com/300x150" class="d-block w-100" alt="...">
-    </div>
+    <router-link tag="div" :to="`/app/${app.id}`" class="carousel-item" v-for="(app, i) in apps" :key="i" :class="{'active':i==0}">
+      <img v-if="app.images.length>0" :src="$api+app.images[0].url" class="d-block w-100 carousel-img" alt="">
+    </router-link>
   </div>
   <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
     <span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -18,10 +18,26 @@
 
 <script>
 export default {
-
+  data:()=>({
+    apps:[]
+  }),
+  methods:{
+    async getFeaturedApps(){
+      const apps = await this.$axios.get(`${this.$api}/apps?featured=true`)
+      this.apps = apps.data
+    }
+  },
+  async mounted(){
+    await this.getFeaturedApps();
+  }
 }
 </script>
 
-<style>
+<style scoped>
+
+.carousel-img {
+    max-height: 50vh;
+    object-fit: cover;
+}
 
 </style>

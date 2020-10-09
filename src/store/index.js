@@ -16,6 +16,15 @@ export default new Vuex.Store({
       state.user = user
     }
   },
+  getters:{
+    token(){
+        if(localStorage.getItem('token')){
+          return localStorage.getItem('token');
+        }else{
+          return false;
+        }
+    },
+  },
   actions: {
     setToken({commit}, token){
       localStorage.setItem('token', token);

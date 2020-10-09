@@ -1,43 +1,66 @@
 <template>
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
-        <a class="navbar-brand text-primary" href="#">GaS</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNavDropdown">
-            <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">Home</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Features</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Pricing</a>
-                </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-expanded="false">
-                        Dropdown link
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                        <li><a class="dropdown-item" href="#">Action</a></li>
-                        <li><a class="dropdown-item" href="#">Another action</a></li>
-                        <li><a class="dropdown-item" href="#">Something else here</a></li>
-                    </ul>
-                </li>
-            </ul>
+      <div class="row">
+        <div class="col-12 text-center d-md-block d-none">
+          <router-link tag="a" class="navbar-brand text-primary" to="/"
+            >PWApp.store</router-link
+          >
         </div>
+        <div class="col-4 d-md-none d-sm-block">
+          <router-link tag="a" class="navbar-brand text-primary" to="/"
+            >PWApp.store</router-link
+          >
+        </div>
+        <div class="col-md-12 col-8 text-right">
+          <button
+            class="navbar-toggler"
+            type="button"
+            data-toggle="collapse"
+            data-target="#navbarNavDropdown"
+            aria-controls="navbarNavDropdown"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav">
+              <li class="nav-item" v-for="(menu, i) in menus" :key="i">
+                <router-link
+                  tag="a"
+                  :to="menu.path"
+                  class="nav-link"
+                  aria-current="page"
+                  active-class="active"
+                  exact
+                  >{{ $t(`menu.${menu.name}`) }}</router-link
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
     </div>
-</nav>
+  </nav>
 </template>
 
 <script>
 export default {
-
-}
+  data: () => ({
+    menus: [],
+  }),
+  methods: {
+    async loadMenu() {
+      const menus = await this.$axios.get(`${this.$api}/menus?_sort=order:asc`);
+      this.menus = menus.data;
+    },
+  },
+  async created() {
+    await this.loadMenu();
+  },
+};
 </script>
 
 <style>
-
 </style>

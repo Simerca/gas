@@ -1,9 +1,10 @@
 <template>
 <div class="row row-cols-4">
-    <router-link tag="div" :to="'/app/'+data.id" class="col" v-for="(data,i) in apps" :key="i">
-        <div class="col-12 pl-1 pr-1">
+    <template v-if="apps.length>0">
+    <router-link tag="div" :to="`/app/${data.id}`" class="col" v-for="(data,i) in apps" :key="i">
+        <div class="col-12 pl-1 pr-1 text-center">
             <template v-if="data.icon">
-                <img class="img-fluid rounded" :src="'http://localhost:1337'+data.icon.url" />
+                <img class="img-fluid rounded" :src="$api+data.icon.url" />
             </template>
             <template v-else>
                 <img class="img-fluid rounded" src="https://via.placeholder.com/150" />
@@ -13,31 +14,30 @@
             {{ data.name }}
         </div>
     </router-link>
+    </template>
+    <template v-else>
+        <NoApp />
+    </template>
 </div>
 </template>
 
 <script>
-import gql from 'graphql-tag'
 export default {
-    apollo: {
-        apps() {
-            return {
-                query: gql `
-                    {apps(limit:4){
-                        id
-                        name
-                        description
-                        icon {
-                            url
-                        }
-                        images {
-                            url
-                        }
-                        packageid
-                    }}
-             `
-            }
+    props:['categorie'],
+    components:{
+        NoApp:()=>import('@/components/NoApp.vue')
+    },
+    data:()=>({
+        apps:[]
+    }),
+    methods:{
+        async loadApps(){
+            const apps = await this.$axios.get(`${this.$api}/apps?categorie.id=${this.categorie}&_limit=4&_sort=id:desc`)
+            this.apps = apps.data
         }
+    },
+    async mounted(){
+        await this.loadApps();
     }
 }
 </script>

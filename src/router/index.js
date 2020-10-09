@@ -12,7 +12,8 @@ const isLoggedIn = (to, from, next)=>{
     }
   }).catch(err=>{
     console.log(err);
-    return next('/login')
+    console.log('from',to)
+    return next(`/login?redirect=${to.path}`)
   })
 };
 
@@ -21,7 +22,6 @@ const routes = [
     path: '/',
     name: 'Home',
     component: Home,
-    beforeEnter: isLoggedIn
   },
   {
     path: '/loading',
@@ -30,10 +30,17 @@ const routes = [
     beforeEnter: isLoggedIn
   },
   {
-    path: '/app/:id',
+    path: '/app/:id_app',
     name: 'AppPage',
     component: () => import('../views/AppPage.vue'),
-    beforeEnter: isLoggedIn
+  },
+  {
+    path: '/categorie',
+    name: 'AppList',
+    component: () => import('@/views/Categories.vue'),
+    children:[
+      {path:':categorie', component:()=>import('@/components/AppsList.vue')}
+    ]
   },
   {
     path: '/view',
@@ -45,6 +52,17 @@ const routes = [
     path: '/login',
     name: 'Login',
     component: () => import ('../views/Login.vue')
+  },
+  {
+    path: '/creators',
+    name: 'Creators',
+    beforeEnter: isLoggedIn,
+    component: () => import ('../views/Creators.vue'),
+    children:[
+      {path:'', component:()=>import('@/components/Creators/Dashboard')},
+      {path:'add', component:()=>import('@/components/Creators/AddYourApp')},
+      {path:'edit/:id_app', component:()=>import('@/components/Creators/AddYourApp')},
+    ]
   },
   {
     path: '/about',

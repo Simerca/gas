@@ -2,7 +2,7 @@
   <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
   <div class="carousel-inner" v-for="(image,i) in images" :key="i">
     <div class="carousel-item" :class="{'active':i==0}">
-      <img :src="'http://localhost:1337'+image.url" class="d-block w-100" alt="...">
+      <img :src="$api+image.url" class="d-block w-100 carousel-img ">
     </div>
   </div>
   <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
@@ -22,6 +22,11 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+
+.carousel-img {
+    max-height: 50vh;
+    object-fit: cover;
+}
 
 </style>

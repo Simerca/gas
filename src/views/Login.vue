@@ -1,20 +1,20 @@
 <template>
-<div class="container-fluid vh-100 bg-login">
+<div class="container-fluid vh-100 bg-login p-5">
     <div class="row">
-        <div class="col-md-12">
-            GaS
+        <div class="col-md-12 text-primary text-center">
+            <h3>PWApp.store</h3>
         </div>
         <div class="col-md-12 my-2">
-            <input type="email" class="form-control" v-model="email" />
+            <input type="email" class="form-control" v-model="email" :placeholder="$t('form.emailPlaceholder')"/>
         </div>
         <div class="col-md-12 my-2">
-            <input type="password" class="form-control" v-model="password"/>
+            <input type="password" class="form-control" v-model="password" :placeholder="$t('form.passwordPlaceholder')"/>
         </div>
         <div class="col-md-12 my-2">
-            <button class="btn btn-block btn-primary font-weight-bold text-white" @click="login()">Se connecter</button>
+            <button class="btn btn-block btn-primary font-weight-bold text-white" @click="login()">{{ $t('form.login') }}</button>
         </div>
         <div class="col-md-12 my-2">
-            <button class="btn btn-block btn-light font-weight-bold" @click="register=true">S'enregistrer</button>
+            <button class="btn btn-block btn-light font-weight-bold" @click="register=true">{{ $t('form.signin') }}</button>
         </div>
     </div>
     <Register @close="register=false" :isShow="register"/>
@@ -54,7 +54,11 @@ export default {
                             type:'success',
                             duration:2000
                     })
-                    this.$router.push('/')
+                    if(this.$route.query.redirect){
+                        this.$router.push(this.$route.query.redirect)
+                    }else{
+                        this.$router.push('/')
+                    }
                 })
                 .catch(error => {
                     // Handle error.
@@ -65,6 +69,9 @@ export default {
                     })
                 });
         }
+    },
+    mounted(){
+        console.log('route is',this.$route);
     }
 }
 </script>

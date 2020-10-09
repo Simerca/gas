@@ -5,7 +5,7 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">S'enregistrer</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">{{ $t('form.signin') }}</h5>
                     <button type="button" class="close" data-dismiss="modal" @click="close()" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -13,26 +13,26 @@
                 <div class="modal-body">
                     <div class="form-row">
                         <div class="form-group my-2">
-                            <label>Email</label>
+                            <label>{{ $t('form.email') }}</label>
                             <input class="form-control" v-model="email" />
                         </div>
                         <div class="form-group my-2">
-                            <label>Mot de passe</label>
-                            <input class="form-control" v-model="password" />
+                            <label>{{ $t('form.password') }}</label>
+                            <input class="form-control" type="password" v-model="password" />
                         </div>
                         <div class="form-group my-2">
-                            <label>Confirmez le mot de passe</label>
+                            <label>{{ $t('form.passwordConfirm') }}</label>
                             <input class="form-control" v-model="passwordConfirm" />
                         </div>
                         <div class="form-group my-2">
                             <label>
-                                <input type="checkbox" v-model="agree"> J'accepte les conditions générales d'utilisation
+                                <input type="checkbox" v-model="agree">{{ $t('form.agreeRgpd') }}
                             </label>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" @click="register()">S'inscrire</button>
+                    <button type="button" class="btn btn-primary" @click="register()">{{ $t('form.signInButton') }}</button>
                 </div>
             </div>
         </div>
@@ -61,7 +61,7 @@ export default {
             console.log(this.agree)
             if (this.password == this.passwordConfirm && this.agree && this.email.includes('@')) {
                 axios
-                    .post('http://localhost:1337/auth/local/register', {
+                    .post(`${this.$api}/auth/local/register`, {
                         username: this.email,
                         email: this.email,
                         password: this.password,
@@ -71,7 +71,7 @@ export default {
                         console.log('Well done!');
                         console.log('User profile', response.data.user);
                         console.log('User token', response.data.jwt);
-                        this.$toasted.show('Enregistrement réussi...',{
+                        this.$toasted.show(this.$t('form.successSignin'),{
                             type:'success',
                             duration:2000
                         })
@@ -88,7 +88,7 @@ export default {
                         })
                     });
             }else{
-                this.$toasted.show('Il y a une erreur dans le formulaire',{
+                this.$toasted.show(this.$t('form.errorSignin'),{
                             type:'error',
                             duration:2000
                         })

@@ -14,6 +14,7 @@ export default {
 <style lang="scss">
 $theme-colors: (
   "primary":    #FF6A87,
+  "danger": #ff0000
 );
 @import "~bootswatch/dist/darkly/variables";
 @import 'bootstrap/scss/bootstrap';

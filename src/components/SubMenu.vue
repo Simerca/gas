@@ -1,7 +1,7 @@
 <template>
   <div class="row mw-100">
-      <div class="col text-center" v-for="(link, i) in links" :key="i">
-          <h6 :class="link.class">{{link.name}}</h6>
+      <div class="col text-center pointer" v-for="(link, i) in links" :key="i">
+          <router-link active-class="text-primary" tag="h6" :to="link.to" :class="link.class" exact>{{link.name}}</router-link>
       </div>
   </div>
 </template>
@@ -12,14 +12,16 @@ export default {
         return {
             links:[
                 {
-                    name:'Accueil',
-                    class:'text-primary'
+                    name:this.$t('menu.home'),
+                    to:"/"
                 },
                 {
-                    name:'Jeux'
+                    name:this.$t('categories.games'),
+                    to:"/categorie/games"
                 },
                 {
-                    name:'Applis'
+                    name:this.$t('categories.apps'),
+                    to:"/categorie/apps"
                 },
             ]
         }
@@ -31,5 +33,9 @@ export default {
 .mw-100{
     max-width:100%;
     overflow-x: scroll;
+}
+
+.pointer{
+    cursor:pointer;
 }
 </style>

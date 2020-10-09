@@ -1,5 +1,5 @@
 <template>
-<div class="home">
+<div class="container-fluid">
     <Navbar />
     <div class="container-fluid mx-0 px-0 mb-2">
         <div class="row col-12">
@@ -10,22 +10,13 @@
         </div>
     </div>
     <div class="container-fluid">
-        <div class="row">
+        <div class="row" v-for="(cat, i) in categories" :key="i">
             <div class="col-12">
-                <h4>Top des jeux gratuit</h4>
+                <h4>{{ $t('home.TopOfCatName', {name:$t(`categories.${cat.titre}`)}) }}</h4>
             </div>
-            <AppSlider />
+            <AppSlider :categorie="cat.id" />
             <div class="col-12 text-right">
-                <router-link to="/" tag="a" class="text-primary">Tout voir</router-link>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-12">
-                <h4>Top des apps gratuit</h4>
-            </div>
-            <AppSlider />
-            <div class="col-12 text-right">
-                <router-link to="/" tag="a" class="text-primary">Tout voir</router-link>
+                <router-link :to="`/categorie/${cat.titre}`" tag="a" class="text-primary">{{ $t('home.seeAll') }}</router-link>
             </div>
         </div>
     </div>
@@ -40,6 +31,18 @@ export default {
         AppSlider: () => import('../components/AppSlider.vue'),
         AppCarousel: () => import('../components/AppCarousel.vue'),
         SubMenu: () => import('../components/SubMenu.vue'),
+    },
+    data:()=>({
+        categories:[]
+    }),
+    methods:{
+        async loadCat(){
+            const categories = await this.$axios.get(`${this.$api}/categories`)
+            this.categories = categories.data
+        }
+    },
+    async mounted(){
+        await this.loadCat();
     }
 }
 </script>
